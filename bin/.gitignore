@@ -1,2 +1,4 @@
-/modelo/
+/dao/
+/.env
+/util/
 /app/
