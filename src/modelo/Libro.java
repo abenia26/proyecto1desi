@@ -1,3 +1,4 @@
+// Hector Abenia
 package modelo;
 
 public class Libro {
@@ -66,6 +67,16 @@ public class Libro {
 
 	public void setStock(int stock) {
 		this.stock = stock;
+	}
+
+	public String toCSV() {
+		return id + "^" + titulo + "^" + autor + "^" + precio + "^" + stock;
+	}
+
+	public static Libro fromCSV(String linea) {
+		String[] campos = linea.split("\\^");
+		return new Libro(campos[0], campos[1], campos[2], Double.parseDouble(campos[3]),
+				Integer.parseInt(campos[4]));
 	}
 
 	@Override

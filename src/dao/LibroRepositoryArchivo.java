@@ -13,7 +13,6 @@ import modelo.Libro;
 
 public class LibroRepositoryArchivo implements GenericRepository {
 
-	private static final String SEPARADOR = "\\^";
 	private String ruta;
 
 	public LibroRepositoryArchivo(String ruta) {
@@ -31,8 +30,7 @@ public class LibroRepositoryArchivo implements GenericRepository {
 	@Override
 	public boolean insertar(Libro libro) {
 		try (FileWriter fw = new FileWriter(ruta, true)) {
-			fw.write(libro.getId() + "^" + libro.getTitulo() + "^" + libro.getAutor() + "^" + libro.getPrecio() + "^"
-					+ libro.getStock() + "\n");
+			fw.write(libro.toCSV() + "\n");
 			return true;
 		} catch (IOException e) {
 			System.out.println("Error al insertar en el archivo: " + e.getMessage());
@@ -50,8 +48,7 @@ public class LibroRepositoryArchivo implements GenericRepository {
 				if (l.getId().equals(id)) {
 					encontrado = true;
 				} else {
-					fw.write(l.getId() + "^" + l.getTitulo() + "^" + l.getAutor() + "^" + l.getPrecio() + "^"
-							+ l.getStock() + "\n");
+					fw.write(l.toCSV() + "\n");
 				}
 			}
 		} catch (IOException e) {
@@ -68,14 +65,7 @@ public class LibroRepositoryArchivo implements GenericRepository {
 			while (sc.hasNextLine()) {
 				String linea = sc.nextLine();
 				if (!linea.isBlank()) {
-					String[] campos = linea.split(SEPARADOR);
-					Libro l = new Libro();
-					l.setId(campos[0]);
-					l.setTitulo(campos[1]);
-					l.setAutor(campos[2]);
-					l.setPrecio(Double.parseDouble(campos[3]));
-					l.setStock(Integer.parseInt(campos[4]));
-					lista.add(l);
+					lista.add(Libro.fromCSV(linea));
 				}
 			}
 		} catch (FileNotFoundException e) {
