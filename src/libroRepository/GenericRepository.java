@@ -1,10 +1,11 @@
+// Daniel Ortego
 package libroRepository;
 
 import java.util.ArrayList;
 
 import modelo.Libro;
 
-public interface GenericRepository<T> {
+public interface GenericRepository {
 
 	ArrayList<Libro> obtenerTodos();
 
@@ -16,7 +17,10 @@ public interface GenericRepository<T> {
 
 	ArrayList<Libro> buscarPorStockMinimo(int stockMinimo);
 
-	void insertar(Libro libro);
+	boolean insertar(Libro libro);
 
-	void eliminarPorId(String id);
+	boolean eliminarPorId(String id);
+
+	boolean copiarA(GenericRepository destino);
+
 }
