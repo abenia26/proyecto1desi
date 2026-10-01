@@ -15,6 +15,10 @@ public class LibroRepositoryArchivo implements GenericRepository {
 
 	private String ruta;
 
+	/**
+	 * @param ruta ruta del archivo donde se guardarán los libros
+	 */
+
 	public LibroRepositoryArchivo(String ruta) {
 		this.ruta = ruta;
 		try {
@@ -27,6 +31,11 @@ public class LibroRepositoryArchivo implements GenericRepository {
 		}
 	}
 
+	/**
+	 * @param libro libro que se quiere guardar
+	 * @return {@code true} si se ha escrito correctamente; {@code false} si ha
+	 *         habido un error de escritura
+	 */
 	@Override
 	public boolean insertar(Libro libro) {
 		try (FileWriter fw = new FileWriter(ruta, true)) {
@@ -38,6 +47,11 @@ public class LibroRepositoryArchivo implements GenericRepository {
 		return false;
 	}
 
+	/**
+	 * @param id id del libro que se quiere eliminar
+	 * @return {@code true} si se ha encontrado un libro con ese id; {@code false}
+	 *         en caso contrario
+	 */
 	@Override
 	public boolean eliminarPorId(String id) {
 		ArrayList<Libro> todos = obtenerTodos();
