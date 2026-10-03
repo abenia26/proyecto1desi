@@ -20,6 +20,7 @@ import modelo.Libro;
  */
 public class LibroRepositoryArchivo implements GenericRepository {
 
+	/** Ruta del archivo de texto donde se guardan los libros. */
 	private String ruta;
 
 	/**

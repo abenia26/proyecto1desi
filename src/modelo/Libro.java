@@ -9,10 +9,15 @@ package modelo;
  * @author Hector Abenia
  */
 public class Libro {
+	/** Id del libro. */
 	protected String id;
+	/** Título del libro. */
 	protected String titulo;
+	/** Autor del libro. */
 	protected String autor;
+	/** Precio del libro. */
 	protected double precio;
+	/** Unidades disponibles del libro. */
 	protected int stock;
 
 	/**
