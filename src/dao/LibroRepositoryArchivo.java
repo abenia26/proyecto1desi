@@ -23,9 +23,11 @@ public class LibroRepositoryArchivo implements GenericRepository {
 	private String ruta;
 
 	/**
+	 * Crea el repositorio asociado a la ruta indicada y, si el archivo no existe,
+	 * lo crea vacío.
+	 *
 	 * @param ruta ruta del archivo donde se guardarán los libros
 	 */
-
 	public LibroRepositoryArchivo(String ruta) {
 		this.ruta = ruta;
 		try {
@@ -158,6 +160,14 @@ public class LibroRepositoryArchivo implements GenericRepository {
 		return encontrados;
 	}
 
+	/**
+	 * Recorre todos los libros del archivo y se queda con aquellos cuyo stock es
+	 * igual o superior al indicado.
+	 *
+	 * @param stockMinimo stock mínimo (incluido) que debe tener el libro
+	 * @return la lista de libros con stock mayor o igual que {@code stockMinimo};
+	 *         vacía si no hay ninguno
+	 */
 	@Override
 	public ArrayList<Libro> buscarPorStockMinimo(int stockMinimo) {
 		ArrayList<Libro> encontrados = new ArrayList<Libro>();
@@ -169,6 +179,14 @@ public class LibroRepositoryArchivo implements GenericRepository {
 		return encontrados;
 	}
 
+	/**
+	 * Lee todos los libros del archivo y los inserta uno a uno en el repositorio
+	 * de destino con su método {@code insertar}.
+	 *
+	 * @param destino repositorio al que se copian los libros
+	 * @return {@code true} siempre, ya que no se comprueba el resultado de cada
+	 *         inserción
+	 */
 	@Override
 	public boolean copiarA(GenericRepository destino) {
 		ArrayList<Libro> todos = obtenerTodos();
