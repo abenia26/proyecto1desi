@@ -1,6 +1,13 @@
 // Hector Abenia
 package modelo;
 
+/**
+ * Representa un libro de la biblioteca con su id, título, autor, precio y
+ * stock. Incluye la conversión desde y hacia una línea CSV separada por
+ * {@code ^}, que usan los repositorios para guardar los libros en archivo.
+ *
+ * @author Hector Abenia
+ */
 public class Libro {
 	protected String id;
 	protected String titulo;
@@ -8,6 +15,15 @@ public class Libro {
 	protected double precio;
 	protected int stock;
 
+	/**
+	 * Crea un libro indicando todos sus datos, incluido el id.
+	 *
+	 * @param id     identificador del libro
+	 * @param titulo título del libro
+	 * @param autor  autor del libro
+	 * @param precio precio del libro
+	 * @param stock  unidades disponibles del libro
+	 */
 	public Libro(String id, String titulo, String autor, double precio, int stock) {
 		super();
 		this.id = id;
@@ -17,6 +33,14 @@ public class Libro {
 		this.stock = stock;
 	}
 
+	/**
+	 * Crea un libro sin id, dejándolo en {@code null}.
+	 *
+	 * @param titulo título del libro
+	 * @param autor  autor del libro
+	 * @param precio precio del libro
+	 * @param stock  unidades disponibles del libro
+	 */
 	public Libro(String titulo, String autor, double precio, int stock) {
 		super();
 		this.titulo = titulo;
@@ -25,6 +49,10 @@ public class Libro {
 		this.stock = stock;
 	}
 
+	/**
+	 * Crea un libro vacío, sin ningún dato asignado. Los datos se rellenan después
+	 * con los métodos {@code set}.
+	 */
 	public Libro() {
 		super();
 	}
