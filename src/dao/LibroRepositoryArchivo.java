@@ -11,6 +11,13 @@ import java.util.Scanner;
 import libroRepository.GenericRepository;
 import modelo.Libro;
 
+/**
+ * Implementación de {@link GenericRepository} que guarda los libros en un
+ * archivo de texto, un libro por línea en formato CSV. Cada operación abre y
+ * lee el archivo directamente, sin mantener los libros en memoria.
+ *
+ * @author Daniel Ortego
+ */
 public class LibroRepositoryArchivo implements GenericRepository {
 
 	private String ruta;
@@ -49,8 +56,7 @@ public class LibroRepositoryArchivo implements GenericRepository {
 
 	/**
 	 * @param id id del libro que se quiere eliminar
-	 * @return {@code true} si se ha encontrado un libro con ese id; {@code false}
-	 *         en caso contrario
+	 * @return {@code true} si se ha encontrado un libro con ese id; {@code false} en caso contrario
 	 */
 	@Override
 	public boolean eliminarPorId(String id) {
@@ -72,6 +78,13 @@ public class LibroRepositoryArchivo implements GenericRepository {
 		return encontrado;
 	}
 
+	/**
+	 * Lee el archivo línea a línea con un {@link Scanner}, ignora las líneas en
+	 * blanco y convierte cada una en un {@link Libro} con {@code Libro.fromCSV}.
+	 *
+	 * @return la lista de libros del archivo; vacía si el archivo no tiene libros o
+	 *         no se ha podido leer
+	 */
 	@Override
 	public ArrayList<Libro> obtenerTodos() {
 		ArrayList<Libro> lista = new ArrayList<Libro>();
@@ -88,6 +101,14 @@ public class LibroRepositoryArchivo implements GenericRepository {
 		return lista;
 	}
 
+	/**
+	 * Recorre todos los libros del archivo y se queda con aquellos cuyo título
+	 * contiene el texto indicado, distinguiendo mayúsculas de minúsculas.
+	 *
+	 * @param titulo texto que debe contener el título del libro
+	 * @return la lista de libros cuyo título contiene el texto; vacía si no hay
+	 *         ninguno
+	 */
 	@Override
 	public ArrayList<Libro> buscarPorTitulo(String titulo) {
 		ArrayList<Libro> encontrados = new ArrayList<Libro>();
@@ -99,6 +120,14 @@ public class LibroRepositoryArchivo implements GenericRepository {
 		return encontrados;
 	}
 
+	/**
+	 * Recorre todos los libros del archivo y se queda con aquellos cuyo autor
+	 * contiene el texto indicado, distinguiendo mayúsculas de minúsculas.
+	 *
+	 * @param autor texto que debe contener el autor del libro
+	 * @return la lista de libros cuyo autor contiene el texto; vacía si no hay
+	 *         ninguno
+	 */
 	@Override
 	public ArrayList<Libro> buscarPorAutor(String autor) {
 		ArrayList<Libro> encontrados = new ArrayList<Libro>();
@@ -110,6 +139,14 @@ public class LibroRepositoryArchivo implements GenericRepository {
 		return encontrados;
 	}
 
+	/**
+	 * Recorre todos los libros del archivo y se queda con los que cuyo precio está
+	 * dentro del rango indicado, ambos extremos incluidos.
+	 *
+	 * @param precioMin precio mínimo (incluido)
+	 * @param precioMax precio máximo (incluido)
+	 * @return la lista de libros con precio entre {@code precioMin} y  {@code precioMax}
+	 */
 	@Override
 	public ArrayList<Libro> buscarPorRangoPrecio(double precioMin, double precioMax) {
 		ArrayList<Libro> encontrados = new ArrayList<Libro>();
