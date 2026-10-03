@@ -37,14 +37,50 @@ public interface GenericRepository {
 	 */
 	ArrayList<Libro> buscarPorAutor(String autor);
 
+	/**
+	 * Busca los libros cuyo precio está dentro del rango indicado, ambos extremos
+	 * incluidos.
+	 *
+	 * @param precioMin precio mínimo (incluido)
+	 * @param precioMax precio máximo (incluido)
+	 * @return la lista de libros con precio dentro del rango; vacía si no hay
+	 *         ninguno
+	 */
 	ArrayList<Libro> buscarPorRangoPrecio(double precioMin, double precioMax);
 
+	/**
+	 * Busca los libros cuyo stock es igual o superior al indicado.
+	 *
+	 * @param stockMinimo stock mínimo (incluido) que debe tener el libro
+	 * @return la lista de libros con stock suficiente; vacía si no hay ninguno
+	 */
 	ArrayList<Libro> buscarPorStockMinimo(int stockMinimo);
 
+	/**
+	 * Guarda un libro nuevo en el repositorio.
+	 *
+	 * @param libro libro que se quiere guardar
+	 * @return {@code true} si se ha guardado correctamente; {@code false} si ha
+	 *         habido algún error
+	 */
 	boolean insertar(Libro libro);
 
+	/**
+	 * Elimina del repositorio el libro que tiene el id indicado.
+	 *
+	 * @param id id del libro que se quiere eliminar
+	 * @return {@code true} si se ha encontrado un libro con ese id; {@code false}
+	 *         en caso contrario
+	 */
 	boolean eliminarPorId(String id);
 
+	/**
+	 * Copia todos los libros de este repositorio al repositorio de destino.
+	 *
+	 * @param destino repositorio al que se copian los libros
+	 * @return {@code true} si la copia se ha realizado; {@code false} en caso
+	 *         contrario
+	 */
 	boolean copiarA(GenericRepository destino);
 
 }
