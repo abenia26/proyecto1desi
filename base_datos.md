@@ -38,3 +38,15 @@ También sale la relación entre libro y autor con un dato propio: el rol (princ
 | Empleado – Pedido | 1:N | Un empleado atiende muchos pedidos. Cada pedido lo atiende un empleado. |
 | Cliente – Pedido | 1:N | Un cliente hace muchos pedidos. Cada pedido lo compra un cliente. |
 | Pedido – Libro | N:M | Un pedido lleva varios libros y un libro sale en muchos pedidos. Se resuelve con `linea_pedido`, que guarda la cantidad y el precio cobrado. |
+
+### 2.3 Datos descartados
+ 
+| Dato | Motivo |
+|---|---|
+| Total del pedido | Se calcula sumando `cantidad * precio_cobrado` de sus líneas. |
+| Subtotal de cada línea | Se calcula multiplicando cantidad por precio. |
+| Columna «stock» de la hoja de cálculo | Un stock por libro no sirve con tres tiendas. Se sustituye por `inventario`. |
+| «Cortázar / Borges» en una sola celda | Son dos autores. Se guardan como dos filas en `libro_autor`. |
+| Editorial repetida en cada fila de la hoja | Se guarda una vez en `editorial` y el libro apunta a ella. |
+| Historial de tiendas de un empleado | Elena dice que no le importa. Solo se guarda la tienda actual. |
+| Nombre de la tienda, teléfono y cargo del empleado en el ticket | Ya están en `tienda` y `empleado`. El pedido solo guarda las claves foráneas. |
