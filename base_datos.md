@@ -50,3 +50,17 @@ También sale la relación entre libro y autor con un dato propio: el rol (princ
 | Editorial repetida en cada fila de la hoja | Se guarda una vez en `editorial` y el libro apunta a ella. |
 | Historial de tiendas de un empleado | Elena dice que no le importa. Solo se guarda la tienda actual. |
 | Nombre de la tienda, teléfono y cargo del empleado en el ticket | Ya están en `tienda` y `empleado`. El pedido solo guarda las claves foráneas. |
+
+## 3. Reglas de negocio
+ 
+1. Una tienda tiene nombre, dirección, teléfono y ciudad. El nombre de cada tienda es único.
+2. Cada libro se identifica por su ISBN, de 13 cifras. Su precio de catálogo y su número de páginas no pueden ser negativos.
+3. Un libro lo publica una única editorial y una editorial publica muchos libros.
+4. Un libro puede tener varios autores y un autor puede tener varios libros. En cada libro, cada autor es principal o colaborador.
+5. Para cada libro y cada tienda se guarda cuántas copias hay y la fecha del último conteo. Si un libro no está en una tienda, no hay fila. La cantidad no puede ser negativa.
+6. Cada empleado trabaja en una sola tienda. Su cargo es librero, cajero o encargado.
+7. El correo de un cliente es único. El teléfono es opcional.
+8. Un pedido se hace en una sola tienda, lo atiende un solo empleado y lo compra un solo cliente.
+9. La forma de pago de un pedido es efectivo, tarjeta o bizum. Su estado es preparado, entregado o cancelado.
+10. Un pedido lleva varios libros distintos. De cada uno se guarda la cantidad, que debe ser mayor que 0.
+11. Cada línea de pedido guarda el precio que se cobró en ese momento, que no puede ser negativo y no cambia aunque el libro suba de precio.
