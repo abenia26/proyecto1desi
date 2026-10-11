@@ -64,3 +64,21 @@ También sale la relación entre libro y autor con un dato propio: el rol (princ
 9. La forma de pago de un pedido es efectivo, tarjeta o bizum. Su estado es preparado, entregado o cancelado.
 10. Un pedido lleva varios libros distintos. De cada uno se guarda la cantidad, que debe ser mayor que 0.
 11. Cada línea de pedido guarda el precio que se cobró en ese momento, que no puede ser negativo y no cambia aunque el libro suba de precio.
+
+## 4. Diagrama entidad-relación
+
+<!-- Aqui añade Héctor la imagen del diagrama entidad - relación 
+ Verifica que en la bd que me dijiste q harías, que las entidades llevan el mismo nombre que puse.-->
+
+Las tablas en amarillo son las intermedias de las relaciones N:M. En el dibujo cada tabla intermedia se une a sus dos tablas con relaciones 1:N.
+
+| Relación | Tipo | Cómo se resuelve |
+|---|---|---|
+| editorial – libro | 1:N | `libro.editorial_id` |
+| libro – autor | N:M | Tabla intermedia `libro_autor` (con `rol`) |
+| tienda – libro | N:M | Tabla intermedia `inventario` (con `cantidad` y `fecha_conteo`) |
+| tienda – empleado | 1:N | `empleado.tienda_id` |
+| tienda – pedido | 1:N | `pedido.tienda_id` |
+| empleado – pedido | 1:N | `pedido.empleado_dni` |
+| cliente – pedido | 1:N | `pedido.cliente_id` |
+| pedido – libro | N:M | Tabla intermedia `linea_pedido` (con `cantidad` y `precio_cobrado`) |
