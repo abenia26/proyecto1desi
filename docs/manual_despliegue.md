@@ -338,3 +338,134 @@ copy .env.example .env
 - Explicar qué poner en el `.env` pero no dónde colocarlo.
 - Hacer capturas con la contraseña real a la vista.
 - Poner nombres de variable distintos en el `.env.example` y en el código (`DB_URL`, `DB_USER`, `DB_PASS`).
+
+## 9. Arranque de la aplicación
+
+Dos formas de compilar y ejecutar la aplicación.
+
+**A) Desde Eclipse**
+
+1. Clic derecho sobre el proyecto → *Refresh*, para que recoja el `.env` o `libros.txt` si se han creado fuera del IDE.
+2. Clic derecho sobre `src/app/Main.java` → *Run As → Java Application*.
+3. Eclipse usa la carpeta del proyecto como carpeta de trabajo, así que el `.env` tiene que estar ahí (junto a `src/`, `lib/` y `.classpath`).
+4. Debe aparecer el menú de la aplicación en la consola de Eclipse, pidiendo elegir repositorio.
+
+**B) Desde la terminal, sin Eclipse**
+
+Hace falta compilar y luego ejecutar, indicando dónde están las librerías. Desde la carpeta del proyecto:
+
+```
+javac --module-path lib -d bin -p src --module proyecto1desi
+java --module-path "bin;lib" -m proyecto1desi/app.Main
+```
+
+En los dos casos hay que lanzar la aplicación **desde la carpeta del proyecto**, para que encuentre el `.env` y el archivo `libros.txt`.
+
+<!-- aqui va la imagen de Hector -->
+
+**Errores habituales a evitar:**
+
+- Lanzar la aplicación desde otra carpeta: no encuentra el `.env` ni `libros.txt`.
+- Olvidar el `--module-path` al compilar o ejecutar desde la terminal.
+- No tener bien configurado el `.classpath` (apartado 6): Eclipse no deja ejecutar `Main`.
+
+## 10. Comprobación del despliegue
+
+Una prueba corta para confirmar que todo funciona de verdad, no solo que la aplicación arranca.
+
+Pasos a comprobar, para los **dos repositorios**:
+
+| Nº | Acción | Resultado esperado |
+|---|---|---|
+| 1 | Arrancar y elegir repositorio **2 (MySQL)** | Sale el menú sin errores de conexión |
+| 2 | Opción 1: mostrar todos los libros | Salen los 8 libros de `sql/init.sql` |
+| 3 | Opción 6: insertar un libro de prueba | Mensaje "Libro insertado correctamente." |
+| 4 | Comprobar en MySQL con `SELECT * FROM libros;` | El libro de prueba aparece en la tabla |
+| 5 | Opción 7: eliminar el libro de prueba (confirmando con `s`) | Mensaje "Libro eliminado." |
+| 6 | Salir y volver a arrancar eligiendo repositorio **1 (archivo de texto)** | Sale el menú sobre `libros.txt` |
+| 7 | Opción 1: mostrar todos los libros | Sale la lista del archivo |
+| 8 | Opción 6: insertar un libro de prueba | El libro aparece al abrir `libros.txt` |
+| 9 | Opción 8: copiar todos los libros al otro repositorio (confirmando con `s`) | Mensaje "Copia terminada." y los libros aparecen también en el otro repositorio |
+
+<!-- aqui va la imagen de Hector -->
+
+**Errores habituales a evitar:**
+
+- Probar solo el repositorio MySQL y olvidarse del de archivo de texto.
+- Comprobar solo dentro de la aplicación, sin mirar también fuera de ella (en MySQL con un `SELECT`, o abriendo `libros.txt`).
+
+## 11. Administración
+
+Tareas que hace quien mantiene la aplicación una vez instalada.
+
+**1. Copia de seguridad de la base de datos**
+
+```
+mysqldump -u root -p --result-file=C:\backups\biblioteca_2026-10-25.sql biblioteca
+```
+
+> **Atención:** usar `--result-file` y no `> archivo.sql`. En PowerShell, el `>` guarda el archivo mal y luego no se puede restaurar.
+
+**2. Restaurar una copia de seguridad** (desde `cmd`, igual que en el apartado 7):
+
+```
+mysql -u root -p biblioteca < C:\backups\biblioteca_2026-10-25.sql
+```
+
+**3. Volver a los datos iniciales** ejecutando otra vez `sql/init.sql` (apartado 7). Esto borra los datos actuales y pone de nuevo los 8 libros de ejemplo.
+
+**4. Copia de seguridad del archivo de texto:** `libros.txt` está en la carpeta del proyecto, junto al `.env`. Basta con copiarlo a otro sitio.
+
+**5. Copiar datos entre repositorios (opción 8 del menú):** copia todos los libros del repositorio activo al otro, pidiendo confirmación antes. Hay que probar qué pasa si un libro con el mismo `id` ya existe en el destino (se duplica, se sobrescribe o se ignora) y escribir aquí lo que hace realmente la aplicación.
+
+<!-- aqui va la imagen de Hector -->
+
+**Opcional:**
+
+- **Actualizar a una versión nueva:** `git pull` y volver a compilar.
+- **Cambiar de base de datos o de usuario:** editar `DB_URL`, `DB_USER` o `DB_PASS` en el `.env` (apartado 8).
+
+**Errores habituales a evitar:**
+
+- Hacer la copia de seguridad y no probar a restaurarla.
+- Describir la opción 8 sin haber comprobado de verdad qué pasa con los duplicados.
+
+## 12. Resolución de problemas
+
+Tabla con los errores más probables, su causa y su solución. Lo mejor es provocarlos a propósito en la VM (parar el servicio de MySQL, renombrar el `.env`, poner mal la contraseña, quitar un `.jar`...) para capturar el mensaje real.
+
+| Error | Causa | Solución |
+|---|---|---|
+| `Access denied for user 'root'@'localhost'` | Usuario o contraseña del `.env` incorrectos | Revisar `DB_USER` y `DB_PASS` |
+| `Communications link failure` | El servidor MySQL no está arrancado | Iniciar el servicio MySQL en `services.msc` |
+| `Unknown database 'biblioteca'` | No se ha ejecutado `init.sql`, o `DB_URL` no coincide | Ejecutar `sql/init.sql` y revisar `DB_URL` |
+| `No suitable driver found for jdbc:mysql://...` | Falta el Connector/J | Revisar `lib/` y *Build Path → Libraries* (apartado 6) |
+| `Public Key Retrieval is not allowed` | Falta una opción de conexión en MySQL 8 | Añadir `allowPublicKeyRetrieval=true` a `DB_URL` |
+| No encuentra el `.env` | No hay `.env` en la carpeta del proyecto | Crearlo a partir de `.env.example` y lanzar desde ahí (apartado 9) |
+| Eclipse marca el proyecto con error en `module-info.java` | Librería añadida con ruta absoluta, o `lib/` no vinculada | Volver a añadirla con *Add JARs* (apartado 6) |
+| Error de módulo al compilar o ejecutar por terminal | Falta el `--module-path` | Revisar los comandos del apartado 9 |
+| `'mysql' no se reconoce como un comando...` | MySQL no está en el `PATH` | Añadir su carpeta `bin` al `PATH` (apartado 3) |
+| Error con el `<` al ejecutar `init.sql` | Se ha usado PowerShell en vez de `cmd` | Ejecutar desde `cmd`, o usar `source` en el cliente de MySQL |
+
+<!-- aqui va la imagen de Hector -->
+
+**Errores habituales a evitar (al redactar este apartado):**
+
+- Poner errores inventados que nunca se han visto de verdad.
+- Dar soluciones vagas como "revisar la configuración".
+
+## 13. Anexo: validación cruzada
+
+Aquí se recoge lo que pasó cuando otro grupo siguió este manual en una máquina limpia.
+
+**1. Informe recibido del grupo revisor**
+
+*(Pendiente: se incorporará aquí, tal cual, el informe entregado por el grupo que valide este manual.)*
+
+**2. Incidencias y correcciones aplicadas**
+
+| Incidencia del revisor | Apartado | Corrección aplicada |
+|---|---|---|
+| *(pendiente de validación cruzada)* | — | — |
+
+<!-- aqui va la imagen de Hector -->
