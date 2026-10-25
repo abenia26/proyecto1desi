@@ -17,3 +17,27 @@ El manual explica:
 Al terminar este manual, cualquiera debería poder tener la aplicación funcionando en su ordenador, usando tanto el archivo de texto como la base de datos, sin tener que preguntar nada.
 
 <!-- aqui va la imagen de Hector -->
+
+## 2. Requisitos y entorno de pruebas
+
+Antes de empezar hay que tener instalado este software, comprobando la versión con los comandos de verificación (no vale "poner lo que crees que tienes"):
+
+| Software | Versión usada | Para qué |
+|---|---|---|
+| Windows 10/11 | — *(a confirmar por Héctor en la VM)* | Sistema operativo donde se prueba |
+| JDK | 21 | Compilar y ejecutar la aplicación |
+| Eclipse IDE for Java Developers | — *(a confirmar por Héctor)* | Abrir y ejecutar el proyecto |
+| MySQL Community Server | — *(a confirmar por Héctor)* | Guardar los datos en base de datos |
+| Git | — *(a confirmar por Héctor)* | Descargar el proyecto |
+
+**Capturas obligatorias:**
+
+- La VM recién creada (escritorio vacío).
+- El snapshot creado.
+
+<!-- aqui va la imagen de Hector -->
+
+**Errores habituales a evitar:**
+
+- Escribir "Java" o "MySQL" sin decir la versión.
+- Poner la versión que crees que tienes sin comprobarla con `java -version` y `mysql --version`.
