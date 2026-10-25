@@ -41,3 +41,100 @@ Antes de empezar hay que tener instalado este software, comprobando la versión 
 
 - Escribir "Java" o "MySQL" sin decir la versión.
 - Poner la versión que crees que tienes sin comprobarla con `java -version` y `mysql --version`.
+
+## 3. Instalación del software necesario
+
+Pasos para instalar cada programa de la tabla del apartado 2 en un Windows limpio.
+
+**JDK 21**
+
+1. Descargarlo de la página oficial de Eclipse Temurin (o de Oracle).
+2. Durante la instalación, marcar la opción de añadir Java al `PATH`, si el instalador la ofrece.
+3. Comprobarlo abriendo una terminal **nueva** y escribiendo:
+
+   ```
+   java -version
+   ```
+
+**MySQL Community Server**
+
+1. Descargar el instalador de la página oficial de MySQL.
+2. Al instalarlo, pide una contraseña para el usuario `root`. **Hay que apuntarla**, se usa más adelante en el `.env`.
+3. Comprobar que el servicio de MySQL se queda arrancado, abriendo `services.msc` y buscando `MySQL`.
+4. Añadir la carpeta `bin` de MySQL al `PATH` (por ejemplo `C:\Program Files\MySQL\MySQL Server 8.4\bin`), desde *Configuración avanzada del sistema → Variables de entorno*.
+5. Comprobarlo en una terminal nueva escribiendo:
+
+   ```
+   mysql --version
+   ```
+
+**Eclipse IDE for Java Developers**
+
+1. Descargarlo de eclipse.org, el paquete "Eclipse IDE for Java Developers".
+2. Instalar con las opciones por defecto.
+3. Comprobar que abre y pide un *workspace*.
+
+**Git**
+
+1. Descargarlo de la página oficial de Git para Windows.
+2. Dejar las opciones por defecto al instalar.
+3. Comprobarlo en una terminal nueva escribiendo:
+
+   ```
+   git --version
+   ```
+
+**Capturas obligatorias:**
+
+- Las pantallas del instalador donde hay que elegir algo.
+- El `PATH` con la carpeta de MySQL añadida.
+- La salida de los tres comandos de comprobación.
+
+<!-- aqui va la imagen de Hector -->
+
+**Errores habituales a evitar:**
+
+- Comprobar el `PATH` en la misma terminal que ya estaba abierta (no se actualiza).
+- No apuntar la contraseña de `root`: se necesita en el apartado 8.
+
+## 4. Estructura del repositorio
+
+Mapa del repositorio, con una línea explicando qué es cada cosa:
+
+```
+proyecto1desi/
+├── src/                     Código fuente Java
+│   ├── app/                 Clase principal (Main) y menú por consola
+│   ├── dao/                 Repositorios: archivo de texto y MySQL
+│   ├── libroRepository/     Interfaz genérica del repositorio
+│   ├── modelo/              Clase Libro
+│   ├── util/                Conexión a la base de datos (ConexionBD)
+│   └── module-info.java     Módulo Java del proyecto
+├── lib/                     Librerías (.jar) que necesita el proyecto
+│   ├── mysql-connector-j-26.7.0.jar
+│   └── dotenv-java-3.2.0.jar
+├── sql/
+│   └── init.sql             Crea la base de datos, la tabla y los datos de ejemplo
+├── docs/
+│   ├── manual_despliegue.pdf
+│   └── imagenes/            Capturas del manual
+├── javadoc/                 Documentación técnica (Fase 2)
+├── .classpath               Rutas y librerías de Eclipse
+├── .project                 Configuración del proyecto Eclipse
+├── .env.example             Plantilla de configuración (se copia como .env)
+├── .gitignore               Archivos que no se suben a GitHub
+└── README.md
+```
+
+Y el `.gitignore` mínimo:
+
+```
+bin/
+.env
+*.env
+```
+
+**Errores habituales a evitar:**
+
+- Subir `.env` al repositorio. El repositorio es público: la contraseña quedaría visible para todo el mundo y seguiría en el historial aunque luego se borre el archivo. Si ha pasado: `git rm --cached .env`, añadirlo al `.gitignore` y **cambiar esa contraseña**.
+- Subir la carpeta `bin/`: son las clases ya compiladas, no hace falta subirlas.
