@@ -25,7 +25,7 @@ Antes de empezar hay que tener instalado este software, comprobando la versión 
 | Software | Versión usada | Para qué |
 |---|---|---|
 | Windows 10/11 | — *(a confirmar por Héctor en la VM)* | Sistema operativo donde se prueba |
-| JDK | 21 | Compilar y ejecutar la aplicación |
+| JDK | 21.x *(a confirmar por Héctor con `java -version` en la VM)* | Compilar y ejecutar la aplicación |
 | Eclipse IDE for Java Developers | — *(a confirmar por Héctor)* | Abrir y ejecutar el proyecto |
 | MySQL Community Server | — *(a confirmar por Héctor)* | Guardar los datos en base de datos |
 | Git | — *(a confirmar por Héctor)* | Descargar el proyecto |
@@ -145,7 +145,7 @@ Pasos para pasar del enlace de GitHub a tener el proyecto abierto en Eclipse.
 
 ```
 cd C:\proyectos
-git clone https://github.com/<usuario-o-grupo>/proyecto1desi.git
+git clone https://github.com/abenia26/proyecto1desi.git
 ```
 
 Para abrirlo en Eclipse:
@@ -155,7 +155,7 @@ Para abrirlo en Eclipse:
 3. En *Select root directory*, elegir la carpeta `proyecto1desi` que se acaba de clonar.
 4. Marcar el proyecto en la lista y pulsar *Finish*.
 
-Si todo ha ido bien, en el *Package Explorer* se ve el proyecto `proyecto1desi` con los paquetes `app`, `dao`, `libroRepository`, `modelo` y `util`. Puede salir un error en `module-info.java` hasta que se configuren las librerías, eso se arregla en el apartado 6.
+Si todo ha ido bien, en el *Package Explorer* se ve el proyecto `proyecto1desi` con los paquetes `app`, `dao`, `libroRepository`, `modelo` y `util`. Puede salir un error en `module-info.java` si faltan los `requires` del módulo, eso se arregla en el apartado 12.
 
 **Capturas obligatorias:**
 
@@ -355,7 +355,7 @@ Dos formas de compilar y ejecutar la aplicación.
 Hace falta compilar y luego ejecutar, indicando dónde están las librerías. Desde la carpeta del proyecto:
 
 ```
-javac --module-path lib -d bin -p src --module proyecto1desi
+javac --module-path lib --module-source-path proyecto1desi=src -d bin --module proyecto1desi
 java --module-path "bin;lib" -m proyecto1desi/app.Main
 ```
 
@@ -416,7 +416,10 @@ mysql -u root -p biblioteca < C:\backups\biblioteca_2026-10-25.sql
 
 **4. Copia de seguridad del archivo de texto:** `libros.txt` está en la carpeta del proyecto, junto al `.env`. Basta con copiarlo a otro sitio.
 
-**5. Copiar datos entre repositorios (opción 8 del menú):** copia todos los libros del repositorio activo al otro, pidiendo confirmación antes. Hay que probar qué pasa si un libro con el mismo `id` ya existe en el destino (se duplica, se sobrescribe o se ignora) y escribir aquí lo que hace realmente la aplicación.
+**5. Copiar datos entre repositorios (opción 8 del menú):** copia todos los libros del repositorio activo al otro, pidiendo confirmación antes. Comportamiento real comprobado con libros duplicados (mismo `id` ya existente en el destino):
+
+- **De MySQL a archivo de texto:** los libros se duplican, porque la copia añade cada libro al final de `libros.txt` sin comprobar si ya existe.
+- **De archivo de texto a MySQL:** cada libro ya existente da un error de clave duplicada y no se inserta, pero igualmente aparece el mensaje "Copia terminada.", porque el resultado de la copia no depende de si cada libro se insertó o no.
 
 <!-- aqui va la imagen de Hector -->
 
@@ -442,7 +445,7 @@ Tabla con los errores más probables, su causa y su solución. Lo mejor es provo
 | `No suitable driver found for jdbc:mysql://...` | Falta el Connector/J | Revisar `lib/` y *Build Path → Libraries* (apartado 6) |
 | `Public Key Retrieval is not allowed` | Falta una opción de conexión en MySQL 8 | Añadir `allowPublicKeyRetrieval=true` a `DB_URL` |
 | No encuentra el `.env` | No hay `.env` en la carpeta del proyecto | Crearlo a partir de `.env.example` y lanzar desde ahí (apartado 9) |
-| Eclipse marca el proyecto con error en `module-info.java` | Librería añadida con ruta absoluta, o `lib/` no vinculada | Volver a añadirla con *Add JARs* (apartado 6) |
+| Eclipse marca el proyecto con error en `module-info.java` | Faltan los `requires` del módulo (p. ej. `java.sql` o `io.github.cdimascio.dotenv.java`) | Añadir los `requires` que falten dentro de `module proyecto1desi { ... }` |
 | Error de módulo al compilar o ejecutar por terminal | Falta el `--module-path` | Revisar los comandos del apartado 9 |
 | `'mysql' no se reconoce como un comando...` | MySQL no está en el `PATH` | Añadir su carpeta `bin` al `PATH` (apartado 3) |
 | Error con el `<` al ejecutar `init.sql` | Se ha usado PowerShell en vez de `cmd` | Ejecutar desde `cmd`, o usar `source` en el cliente de MySQL |
